@@ -1,25 +1,8 @@
 package com.jroldan;
 
-import java.util.concurrent.ThreadLocalRandom;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-
-
-/**
- * Hello world!
- *
- */
 public class App 
 {
-	
-	private static String line;
-	private static String[] data;
-	static String humedad;
-	static String temperatura;
 	
     	public static void main(String[] args) throws Exception{
     		
