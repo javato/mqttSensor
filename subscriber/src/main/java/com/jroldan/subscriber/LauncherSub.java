@@ -7,7 +7,7 @@ package com.jroldan.subscriber;
  * @author jroldan
  *
  */
-public class SubMain {
+public class LauncherSub {
 
 	/**
 	 * @param args
