@@ -1,18 +1,35 @@
 package com.jroldan;
 
+/*
+
+/home/pi/Desktop/readScripts/dht22_temperatura.py
+/home/pi/Desktop/readScripts/dht22_humedad.py
+
+
+ */
 
 public class LauncherPub 
 {
 	
     	public static void main(String[] args) throws Exception{
     		
-    		if(args.length < 1) {
-    			System.out.println("Se requiere especificar el ID del modulo como parametro");
+    		if(args.length < 2) {
+    			System.out.println("Se requieren especificar los siguientes argumentos: idModulo, nombreScript, topic(opcional)");
     		}
-    		else if(args.length > 0) {
-    			Sensor sensor = new Sensor();
+    		//args[0] --> idModulo
+    		//args[1] --> rutaScript
+    		else if(args.length > 1) {
+    			String topic;
+    			Sensor sensor = new Sensor(args[1]);
     			ConexionMQTT conexionMqtt = new ConexionMQTT(args[0]);
     			//ConexionMQTT conexionHumedad = new ConexionMQTT(args[1]);
+    			
+    			if(args.length == 3) {
+    				conexionMqtt.setTopic(args[2]);
+    			}
+    			else {
+    				conexionMqtt.setTopic("/");
+    			}
     			
     			//TODO Validar con bdd que es un ID existente
     			//if(existeID?) {
@@ -21,23 +38,23 @@ public class LauncherPub
     			//conexionHumedad.getClienteMQTT().connect(conexionHumedad.getConnOptions());
     	    	System.out.println("Conectado al broker!");
     				
-	    			while(1==1) {
-	        			sensor.cargarDatosLectura();
-	        			if(sensor.getTemperatura().equals("") || sensor.getHumedad().equals("")) {
-	        				// Si la lectura ha fallado
-	        				System.out.println("No se ha podido leer la temperatura y/o humedad...");
-	        			}
-	        			else {
-	        				System.out.println("Temperatura: " + sensor.getTemperatura() + "ºC" + " || Humedad: " + sensor.getHumedad() + "HR%");
-	        				//lanzarMQTT
-	        				conexionMqtt.enviarMensaje(sensor.getTemperatura(), "/temperatura", "0");
-	        				conexionMqtt.enviarMensaje(sensor.getHumedad(), "/humedad", "1");
-
-	        				//conexionMqtt.enviarMensaje(sensor.getHumedad(), args[1]);
-	        				
-	        			}
-	        			Thread.sleep(3000);
-	        		}
+    			while(1==1) {
+    				// lee y guarda en objeto el valor
+        			sensor.leerSensor();
+        			if(sensor.getValor().equals("")) {
+        				// Si la lectura ha fallado
+        				System.out.println("No se ha podido leer el sensor...");
+        			}
+        			else {
+        				//lanzarMQTT
+        				conexionMqtt.enviarMensaje(sensor.getValor(), args[0]);
+        				
+        				//conexionMqtt.enviarMensaje(sensor.getHumedad(), args[1]);
+        				
+        			}
+        			//TODO obtener sleep delay 
+        			Thread.sleep(3000);
+        		}
 	    			//TODO permitir que se desconecte al parar de publicar
 //	    			conexionMqtt.getClienteMQTT().disconnect();
 //    		    	System.out.println("Desconectado");

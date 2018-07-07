@@ -19,56 +19,32 @@ public class ConexionMQTT {
     private MqttClient clienteMQTT;
     private MqttConnectOptions connOptions;
     
-    public ConexionMQTT() throws MqttException {
-    	setIdModulo("1");
-    	setTopic("/");
-    	setQos(2);
-    	setBroker("tcp://m23.cloudmqtt.com:15672");
-    	setClientId("3");
-    	setClientUsername("kmnmxxzk");
-    	setClientPwd("fPawFLuAJgn7");
-    	
-    	setPersistence(new MemoryPersistence());
-    	setClienteMQTT(new MqttClient(getBroker(), "3", getPersistence()));
-    	setConnOptions(new MqttConnectOptions());
-    	getConnOptions().setCleanSession(false);
-    	getConnOptions().setUserName(getClientUsername());
-        getConnOptions().setPassword(getClientPwd().toCharArray());
-
-    }
     
     public ConexionMQTT(String idModulo) throws MqttException {
     	setIdModulo(idModulo);
-    	setTopic("/");
+    	setClientId(idModulo);
     	setQos(2);
     	setBroker("tcp://m23.cloudmqtt.com:15672");
-    	setClientId("3");
     	setClientUsername("kmnmxxzk");
     	setClientPwd("fPawFLuAJgn7");
-    	
-    	setPersistence(new MemoryPersistence());
-    	setClienteMQTT(new MqttClient(getBroker(), "3", getPersistence()));
+    	//setPersistence(new MemoryPersistence());
+    	setClienteMQTT(new MqttClient(getBroker(), getClientId()));
     	setConnOptions(new MqttConnectOptions());
     	getConnOptions().setCleanSession(true);
     	getConnOptions().setUserName(getClientUsername());
         getConnOptions().setPassword(getClientPwd().toCharArray());
-
     }
     
-    public void enviarMensaje(String mensaje, String topic, String idModulo) throws MqttSecurityException, MqttException {
-    	
-//    	System.out.println("Conectado al broker...");
-//    	getClienteMQTT().connect(getConnOptions());
-//    	System.out.println("Conectado al broker!");
+    public void enviarMensaje(String mensaje, String idModulo) throws MqttSecurityException, MqttException {
     	
     	System.out.println("Publicando mensaje... " + idModulo + "--" + mensaje);
+    	// en el mensaje publicado mandamos con el formato idModulo--Mensaje
     	MqttMessage message = new MqttMessage((idModulo + "--" + mensaje).getBytes());
     	//MqttMessage message = new MqttMessage(getIdModulo().getBytes());
     	
     	message.setQos(getQos());
-    	clienteMQTT.publish(topic, message);
+    	clienteMQTT.publish(getTopic(), message);
     	System.out.println("Mensaje publicado!");
-    	
     	
     }
 

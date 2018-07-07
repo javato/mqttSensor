@@ -3,89 +3,59 @@
  */
 package com.jroldan;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 /**
  * @author Jvt-WinLaptop
  *
  */
 public class Sensor {
 
-	private String temperatura = "";
-	private String humedad = "";
-	private String pinGpio;
+	private String valor = "";
 	private String rutaScript;
-	private Mht22 mht22;
 	
 	
-	public Sensor() throws Exception {
-		setPinGpio("5");
-		setRutaScript("python /home/pi/Desktop/pigDHT22/pig.py");
-		
-		setMht22(new Mht22(getPinGpio(), getRutaScript()));
-	}
-	
-	public Sensor(String pinGpio, String rutaScript) throws Exception {
-		setPinGpio(pinGpio);
+	public Sensor(String rutaScript) throws Exception {
 		setRutaScript(rutaScript);
-		
-		setMht22(new Mht22(getPinGpio(), getRutaScript()));
 	}
 	
-	public void cargarDatosLectura() throws Exception {
-		String[] datos;
+	public String leerSensor() throws Exception{
+		Runtime rt= Runtime.getRuntime();
+		//Process p=rt.exec(this.rutaScript + " " + this.pinGpio);
+		Process p=rt.exec("python ./readScripts/" + getRutaScript());
 		
-		datos = getMht22().lanzarLectura();
-		
-		if(datos != null) {
-			setTemperatura(datos[0]);
-			setHumedad(datos[1]);
-		}
-		else {
-			setTemperatura("");
-			setHumedad("");
-		}
-		
+		BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		String data = bri.readLine();
+
+	    bri.close();
+      	p.waitFor();
+      	
+      	if(data.equals("read_error")) {
+      		//System.out.println("No se ha podido leer");
+      		setValor("");
+      		return "";
+      	}
+      	else {
+      		//System.out.println("Temperatura: "+data[0]+" 'C Humedad:"+ data[1]+" %RH");
+      		setValor(data);
+      		return data;	
+      	}
 	}
+	
 
 	/**
-	 * @return the temperatura
+	 * @return the valor
 	 */
-	public String getTemperatura() {
-		return temperatura;
+	public String getValor() {
+		return valor;
 	}
-
+	
 	/**
-	 * @param temperatura the temperatura to set
+	 * @param valor the valor to set
 	 */
-	public void setTemperatura(String temperatura) {
-		this.temperatura = temperatura;
-	}
-
-	/**
-	 * @return the humedad
-	 */
-	public String getHumedad() {
-		return humedad;
-	}
-
-	/**
-	 * @param humedad the humedad to set
-	 */
-	public void setHumedad(String humedad) {
-		this.humedad = humedad;
-	}
-
-	/**
-	 * @return the pinGpio
-	 */
-	public String getPinGpio() {
-		return pinGpio;
-	}
-
-	/**
-	 * @param pinGpio the pinGpio to set
-	 */
-	public void setPinGpio(String pinGpio) {
-		this.pinGpio = pinGpio;
+	public void setValor(String valor) {
+		this.valor = valor;
 	}
 
 	/**
@@ -102,18 +72,5 @@ public class Sensor {
 		this.rutaScript = rutaScript;
 	}
 
-	/**
-	 * @return the mht22
-	 */
-	public Mht22 getMht22() {
-		return mht22;
-	}
-
-	/**
-	 * @param mht22 the mht22 to set
-	 */
-	public void setMht22(Mht22 mht22) {
-		this.mht22 = mht22;
-	}
 	
 }
