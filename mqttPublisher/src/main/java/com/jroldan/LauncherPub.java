@@ -1,11 +1,8 @@
 package com.jroldan;
 
 /*
-
-/home/pi/Desktop/readScripts/dht22_temperatura.py
-/home/pi/Desktop/readScripts/dht22_humedad.py
-
-
+dht22_temperatura.py
+dht22_humedad.py
  */
 
 public class LauncherPub 
@@ -17,9 +14,8 @@ public class LauncherPub
     			System.out.println("Se requieren especificar los siguientes argumentos: idModulo, nombreScript, topic(opcional)");
     		}
     		//args[0] --> idModulo
-    		//args[1] --> rutaScript
+    		//args[1] --> nombreScript
     		else if(args.length > 1) {
-    			String topic;
     			Sensor sensor = new Sensor(args[1]);
     			ConexionMQTT conexionMqtt = new ConexionMQTT(args[0]);
     			//ConexionMQTT conexionHumedad = new ConexionMQTT(args[1]);
@@ -49,10 +45,8 @@ public class LauncherPub
         				//lanzarMQTT
         				conexionMqtt.enviarMensaje(sensor.getValor(), args[0]);
         				
-        				//conexionMqtt.enviarMensaje(sensor.getHumedad(), args[1]);
-        				
         			}
-        			//TODO obtener sleep delay 
+        			//TODO obtener sleep delay de bdd
         			Thread.sleep(3000);
         		}
 	    			//TODO permitir que se desconecte al parar de publicar
