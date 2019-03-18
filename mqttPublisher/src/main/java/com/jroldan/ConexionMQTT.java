@@ -1,5 +1,7 @@
 package com.jroldan;
 
+import java.util.Date;
+
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -36,8 +38,8 @@ public class ConexionMQTT {
     }
     
     public void enviarMensaje(String mensaje, String idModulo) throws MqttSecurityException, MqttException {
-    	
-    	System.out.println("Publicando mensaje... " + idModulo + "--" + mensaje);
+    	Date fechaActual = new Date();
+    	System.out.println("[" + fechaActual.toGMTString() + "] " + "Publicando mensaje... " + idModulo + "--" + mensaje);
     	// en el mensaje publicado mandamos con el formato idModulo--Mensaje
     	MqttMessage message = new MqttMessage((idModulo + "--" + mensaje).getBytes());
     	//MqttMessage message = new MqttMessage(getIdModulo().getBytes());
