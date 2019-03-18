@@ -12,12 +12,8 @@ public class ConexionBaseDatos {
 	String usuario;
 	String password;
 	
-//	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-//	String usuario = "aplicacion";
-//	String password = "mqttmola";
-	
 	public ConexionBaseDatos() {
-		setUrl("jdbc:oracle:thin:@mqttmola.cf7ddkfg31tu.eu-west-3.rds.amazonaws.com:1521:ORCL");
+		setUrl("jdbc:oracle:thin:@domogest.cf7ddkfg31tu.eu-west-3.rds.amazonaws.com:1521:ORCL");
 		setUsuario("jroldan");
 		setPassword("mqttmola");
 		generarConexion();
@@ -31,6 +27,7 @@ public class ConexionBaseDatos {
 	}
 	
 	private void generarConexion() {
+		System.out.println("Conectado con la base de datos...");
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
 
@@ -41,6 +38,7 @@ public class ConexionBaseDatos {
         
         try {
 			setConexion(DriverManager.getConnection(url, usuario, password));
+			System.out.println("Se ha establecido la conexión a la base de datos correctamente");
 		} catch (SQLException e) {
 			System.out.println("Ha ocurrido un error al generar la conexion " + e.getMessage());
 		}

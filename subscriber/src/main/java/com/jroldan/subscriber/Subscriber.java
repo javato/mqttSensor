@@ -24,9 +24,6 @@ public class Subscriber implements MqttCallback{
 	private ConexionBaseDatos conexion;
 	
 	/** Datos CloudMQTT **/
-//    private String brokerUrl = "tcp://m23.cloudmqtt.com:15672";
-//    private String clientId = "kmnmxxzk";
-//    private String clientPwd = "fPawFLuAJgn7";
     
     private String brokerUrl;
     private String clientId;
@@ -51,7 +48,7 @@ public class Subscriber implements MqttCallback{
 	public void escucharMensajes(String topic) {
 		
 	    try {
-	    	
+	    	System.out.println("Conectando al broker...");
 	        client = new MqttClient(getBrokerUrl(), "Escuchando");
 	        connOpts = new MqttConnectOptions();
 	        
@@ -60,7 +57,7 @@ public class Subscriber implements MqttCallback{
 	        client.connect(connOpts);
 	        client.setCallback(this);
 	        client.subscribe(topic);
-
+	        System.out.println("Conectado al broker. Escuchando mensajes...");
 	    } catch (MqttException e) {
 	        e.printStackTrace();
 	    }
