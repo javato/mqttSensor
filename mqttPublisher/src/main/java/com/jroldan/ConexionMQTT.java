@@ -39,7 +39,7 @@ public class ConexionMQTT {
     
     public void enviarMensaje(String mensaje, String idModulo) throws MqttSecurityException, MqttException {
     	Date fechaActual = new Date();
-    	System.out.println("[" + fechaActual.toGMTString() + "] " + "Publicando mensaje... " + idModulo + "--" + mensaje);
+    	System.out.println("[" + fechaActual.toLocaleString() + "] " + "Publicando mensaje... " + idModulo + "--" + mensaje);
     	// en el mensaje publicado mandamos con el formato idModulo--Mensaje
     	MqttMessage message = new MqttMessage((idModulo + "--" + mensaje).getBytes());
     	//MqttMessage message = new MqttMessage(getIdModulo().getBytes());
